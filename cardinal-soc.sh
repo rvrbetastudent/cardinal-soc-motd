@@ -1,1 +1,1 @@
-/opt/cardinal-soc-motd/motd.sh
+/opt/cardinal-soc-motd-main/motd.sh
