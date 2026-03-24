@@ -20,12 +20,14 @@ git clone https://github.com/rvrbetastudent/cardinal-soc-motd.git && cd cardinal
 * **Environmental Awareness:** Integrated weather reporting for Coeur d'Alene.
 
 ## 📋 Prerequisites
+Most tools are pre-installed on Rocky Linux 9. If `package-cleanup` is missing, install the utilities:
+* **yum-utils** (Provides `package-cleanup` for security tracking)
+* **curl** (For Weather and Public IP data)
 
-Ensure your system has the following tools installed:
+```bash
+sudo dnf install yum-utils curl -y
+```
 
-* **git**
-* **curl** (Required for Weather and Public IP modules)
-* **procps-ng** (Required for system stats)
 ⚖️ License
 
 Distributed under the MIT License.
