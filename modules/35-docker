@@ -1,0 +1,34 @@
+#!/usr/bin/env bash
+
+set -euo pipefail
+# shellcheck source=./framework.sh
+source "${BASE_DIR}/framework.sh"
+
+type docker > /dev/null 2>&1 || exit 1
+
+# Get docker container name, status, uptime and compose stack
+containers=$(docker ps -a --format "{{ .Label \"com.docker.compose.project\" }},{{ .Names }},{{ .Status }},{{ .State }}")
+
+text=""
+if [[ -z "${containers}" ]]; then
+    text+="no containers\n"
+else
+    while IFS= read -r line; do
+        IFS=$',' read -r stack name description state <<< "${line}"
+        case ${state} in
+            running) color="${CO}" ;;
+            paused | restarting) color="${CW}" ;;
+            exited | dead) color="${CE}" ;;
+            *) color="${CN}" ;;
+        esac
+
+        # If stack is empty, it means the container is not part of a Docker Compose stack
+        if [[ -n "${stack}" ]]; then
+            name="${stack}.${name}"
+        fi
+
+        text+="$(print_split "${WIDTH}" "${name}" "${color}${description,,}${CN}")\n"
+    done <<< "${containers}"
+fi
+
+print_columns "Docker" "${text::-2}"

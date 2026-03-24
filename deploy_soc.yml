@@ -1,0 +1,36 @@
+---
+- name: Deploy Cardinal SOC Dashboard to Classroom
+  hosts: all
+  become: yes
+  tasks:
+    - name: Install Prerequisites
+      dnf:
+        name: [git, figlet, bc, curl, util-linux]
+        state: present
+
+    - name: Sync Cardinal MOTD Folder to /opt
+      # This copies your local 'cardinal-soc-motd' folder to the lab machines
+      copy:
+        src: /home/rvrbeta/cardinal-soc-motd/
+        dest: /opt/cardinal-soc-motd/
+        owner: root
+        group: root
+        mode: '0755'
+
+    - name: Ensure Modules are Executable
+      file:
+        path: "/opt/cardinal-soc-motd/modules/"
+        mode: '0755'
+        recurse: yes
+
+    - name: Set Global Terminal Trigger
+      copy:
+        dest: /etc/profile.d/cardinal-soc.sh
+        mode: '0755'
+        content: |
+          # Only run for interactive shells with enough screen real estate
+          if [[ $- == *i* ]] && [ "$(tput cols)" -ge 80 ]; then
+              if [ -x /opt/cardinal-soc-motd/motd.sh ]; then
+                  /opt/cardinal-soc-motd/motd.sh
+              fi
+          fi
