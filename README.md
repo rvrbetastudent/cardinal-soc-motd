@@ -8,7 +8,7 @@ This dashboard is designed to provide immediate situational awareness the moment
 To install this on your machine, run this single command:
 
 ```bash
-git clone https://github.com/rvrbetastudent/cardinal-soc-motd.git && cd cardinal-soc-motd && chmod +x motd.sh modules/*.sh && ./motd.sh
+sudo git clone -b master https://github.com/rvrbetastudent/cardinal-soc-motd.git /opt/cardinal-soc-motd && cd /opt/cardinal-soc-motd && sudo chmod +x motd.sh modules/*.sh && ./motd.sh
 ```
 
 ## 🛠️ Features
